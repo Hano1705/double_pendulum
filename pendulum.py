@@ -49,7 +49,7 @@ class Pendulum():
     def set_properties(self, mass: int|float
                       , length: int|float):
         '''
-            Sets particle properties
+            Sets pendulum properties
 
             Parameters:
             -------------------------
@@ -64,8 +64,82 @@ class Pendulum():
         self.mass = mass
         self.length = length
 
+    def set_origin(self, origin: np.ndarray|list):
+        '''
+            Sets pendulum origin (hang-point)
+        
+            Parameters:
+            -------------------------
+            origin: Pendulum hang-point
+        '''
+
+        if type(origin) is list:
+            self.origin = np.array(origin, dtype=np.float32)
+        else:
+            self.origin = origin
+
+
+class DoublePendulum():
+    '''
+        A double pendulum, consisting of two coupled pendulum objects.
+    '''
+    def __init__(self, pendulum1: Pendulum, pendulum2: Pendulum):
+        
+        self.pendulum1 = pendulum1
+        self.pendulum2 = pendulum2
+
+    def set_upper_pendulum(self, theta: float|int, w: float|int):
+        '''
+            Sets upper pendulum, as well as origin for lower pendulum
+            
+            Parameters:
+            ----------------
+            theta:  upper pendulum angle
+            w:      upper pendulum angular velocity
+        '''
+        # set upper pendulum
+        self.pendulum1.set_angle(theta = theta)
+        self.pendulum1.set_angular_velocity(w = w)
+        # set lower pendulum origin
+        xp1, yp1 = self.pendulum1.x, self.pendulum1.y 
+        self.pendulum2.set_origin([xp1, yp1])
+
+    def set_lower_pendulum(self, theta: float|int, w: float|int):
+        '''
+            Sets lower pendulum angle and angular velocity
+            
+            Parameters:
+            ----------------
+            theta:  lower pendulum angle
+            w:      lower pendulum angular velocity
+        '''
+        # set lower pendulum
+        self.pendulum2.set_angle(theta = theta)
+        self.pendulum2.set_angular_velocity(w = w)
+
+
 if __name__ == '__main__':
-    unit_pendulum = Pendulum(mass=1, length=1)
-    unit_pendulum.set_angle(theta = np.pi/4)
-    unit_pendulum.set_angular_velocity(w = np.pi)
-    print('Pendulum has been created')
+    # instantiate the two pendula making up the double pendulum
+    pendulum1 = Pendulum(mass=1, length=1, origin=[0,0])
+    pendulum2 = Pendulum(mass=1, length=1)
+    # instantiate the double pendulum
+    double_pendulum = DoublePendulum(pendulum1=pendulum1, pendulum2=pendulum2)
+    double_pendulum.set_upper_pendulum(theta=np.pi/4, w=0)
+    double_pendulum.set_lower_pendulum(theta=np.pi/6, w=0)
+   
+
+    print("double pendulum instantiated")
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots()
+
+    x_points = [double_pendulum.pendulum1.origin[0]
+                , double_pendulum.pendulum1.x
+                , double_pendulum.pendulum2.x]
+    y_points = [double_pendulum.pendulum1.origin[1]
+                , double_pendulum.pendulum1.y
+                , double_pendulum.pendulum2.y]
+    
+    double_pendulum_line, = ax.plot(x_points, y_points, 'o-')
+
+    plt.show()
+    print("double pendulum plotted")
