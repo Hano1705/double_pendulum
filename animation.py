@@ -49,7 +49,7 @@ class PendulumAnimation():
         ax.set_aspect('equal', adjustable='box')
 
         # define artists for projectile and path plotting
-        pendulum = ax.plot([0,x[0]],[0,y[0]],'o-', color='blue')[0]
+        pendulum = ax.plot([x0, x[0]],[y0, y[0]],'o-', color='blue')[0]
         trace = ax.plot(x[0],y[0], color='red',alpha=0.3)[0]
 
     def updateFrame(self, frame):
@@ -60,10 +60,10 @@ class PendulumAnimation():
         '''
         # name variables for brevity
         t, x, y = self.t, self.x, self.y
-
+        x0, y0 = self.pendulum.origin
         # update the pendulum plot
-        pendulum.set_xdata(np.array([0, x[frame]]))
-        pendulum.set_ydata(np.array([0, y[frame]]))
+        pendulum.set_xdata(np.array([x0, x[frame]]))
+        pendulum.set_ydata(np.array([y0, y[frame]]))
 
         # update trace plot
         if frame>100:
@@ -90,7 +90,7 @@ class PendulumAnimation():
 
 if __name__ == '__main__':
 
-    my_pendulum = Pendulum(mass=1, length=1, origin=[0,0])
+    my_pendulum = Pendulum(mass=1, length=1, origin=[1,1])
     my_pendulum.set_angle(theta= np.pi /4)
     my_pendulum.set_angular_velocity(w = 0)
     
