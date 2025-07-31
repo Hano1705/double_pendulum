@@ -5,15 +5,15 @@ import numpy as np
 from matplotlib import animation
 
 from simulator import PendulumSimulator
-from particle import Particle
+from pendulum import Pendulum
 from integrations import RungeKuttaIntegrator
 
-class ProjectileAnimation():
+class PendulumAnimation():
     '''
-        A class for projectile animations.
+        A class for pendulum animations.
     '''
     def __init__(self, simulation: PendulumSimulator
-                 , particle: Particle):
+                 , pendulum: Pendulum):
         '''
             Initializes the animation object, given the results of a projectile simulation
         '''
@@ -21,7 +21,7 @@ class ProjectileAnimation():
         self.x = simulation.x
         self.y = simulation.y
 
-        self.particle = particle
+        self.pendulum = pendulum
 
     def initializeAnimation(self):
         '''
@@ -36,8 +36,10 @@ class ProjectileAnimation():
         fig, ax = plt.subplots()
 
         # set axis limits
-        ax.set_xlim(left=-2, right=2)
-        ax.set_ylim(bottom=-2, top=2)
+        x0, y0 = self.pendulum.origin
+        width = self.pendulum.length*1.5
+        ax.set_xlim(left=x0-width, right=x0+width)
+        ax.set_ylim(bottom=y0-width, top=y0+width)
 
         # axis labels
         ax.set_xlabel('x (m)')
@@ -48,7 +50,7 @@ class ProjectileAnimation():
 
         # define artists for projectile and path plotting
         pendulum = ax.plot([0,x[0]],[0,y[0]],'o-', color='blue')[0]
-        trace = ax.plot(x[0],y[0], '-.', color='red',alpha=0.3)[0]
+        trace = ax.plot(x[0],y[0], color='red',alpha=0.3)[0]
 
     def updateFrame(self, frame):
         '''
@@ -64,8 +66,12 @@ class ProjectileAnimation():
         pendulum.set_ydata(np.array([0, y[frame]]))
 
         # update trace plot
-        trace.set_xdata(x[:frame])
-        trace.set_ydata(y[:frame])
+        if frame>100:
+            trace.set_xdata(x[frame-100:frame])
+            trace.set_ydata(y[frame-100:frame])
+        else:
+            trace.set_xdata(x[:frame])
+            trace.set_ydata(y[:frame])
 
         return (pendulum, trace)
 
@@ -84,20 +90,18 @@ class ProjectileAnimation():
 
 if __name__ == '__main__':
 
-    my_pendulum = Particle(mass=1)
-    my_pendulum.set_position(position=np.array([1, 7 * np.pi / 4])
-                            , coord_sys='polar')
-    my_pendulum.set_velocity(velocity=np.array([0, 0])
-                            , coord_sys='polar')
+    my_pendulum = Pendulum(mass=1, length=1, origin=[0,0])
+    my_pendulum.set_angle(theta= np.pi /4)
+    my_pendulum.set_angular_velocity(w = 0)
     
     rk_solver = RungeKuttaIntegrator()
 
     my_simulation = PendulumSimulator()
-    my_simulation.run_simulation(particle=my_pendulum
-                                    , propagator=rk_solver.propagateState
-                                    , timestep=0.01)
+    my_simulation.run_simulation(pendulum=my_pendulum
+                                , propagator=rk_solver.propagateState
+                                , timestep=0.01)
     print('finished simulation')
-    my_animation = ProjectileAnimation(simulation=my_simulation
-                                      , particle=my_pendulum)
+    my_animation = PendulumAnimation(simulation=my_simulation
+                                      , pendulum=my_pendulum)
     my_animation.showProjectileAnimation()
     print('finished animation')
