@@ -65,16 +65,14 @@ class PendulumSimulator:
     
 if __name__ == '__main__':
 
-    my_pendulum = Pendulum(mass=1, length=1, origin=np.array([0,0]))
-    my_pendulum.set_position(position=np.array([1, 7*np.pi / 4])
-                            , coord_sys='polar')
-    my_pendulum.set_velocity(velocity=np.array([0, 0])
-                            , coord_sys='polar')
+    my_pendulum = Pendulum(mass=1, length=1, origin=[0,0])
+    my_pendulum.set_angle(theta= np.pi /4)
+    my_pendulum.set_angular_velocity(w = 0)
     
     rk_solver = RungeKuttaIntegrator()
 
     my_simulation = PendulumSimulator()
-    my_simulation.run_simulation(particle=my_pendulum
-                                    , propagator=rk_solver.propagateState
-                                    , timestep=0.01)
+    my_simulation.run_simulation(pendulum=my_pendulum
+                                , propagator=rk_solver.propagateState
+                                , timestep=0.01)
     print('finished simulation')
