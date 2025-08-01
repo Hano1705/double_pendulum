@@ -103,7 +103,7 @@ class DoublePendulumSimulation():
 
         func = partial(self.double_pendulum_dynamics, properties=properties)
 
-        while self.time[-1] < 5:
+        while self.time[-1] < 10:
             # update time and state
             time, state = propagator(rhsFunc=func
                                       , time=time

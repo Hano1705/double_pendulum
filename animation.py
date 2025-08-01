@@ -101,7 +101,7 @@ class DoublePendulumAnimation():
         '''
         self.t = simulation.time
         self.x1 = simulation.x1
-        self.y1 = simulation.y2
+        self.y1 = simulation.y1
         self.x2 = simulation.x2
         self.y2 = simulation.y2
 
@@ -151,9 +151,9 @@ class DoublePendulumAnimation():
         pendulum_artist.set_ydata(np.array([y0, y1[frame], y2[frame]]))
 
         # update trace plot
-        if frame>100:
-            trace_artist.set_xdata(x2[frame-100:frame])
-            trace_artist.set_ydata(y2[frame-100:frame])
+        if frame>1000:
+            trace_artist.set_xdata(x2[frame-1000:frame])
+            trace_artist.set_ydata(y2[frame-1000:frame])
         else:
             trace_artist.set_xdata(x2[:frame])
             trace_artist.set_ydata(y2[:frame])
@@ -180,7 +180,7 @@ if __name__ == '__main__':
     pendulum2 = Pendulum(mass=1, length=1)
     # instantiate the double pendulum
     double_pendulum = DoublePendulum(pendulum1=pendulum1, pendulum2=pendulum2)
-    double_pendulum.set_upper_pendulum(theta=np.pi/4, w=0)
+    double_pendulum.set_upper_pendulum(theta=np.pi, w=0)
     double_pendulum.set_lower_pendulum(theta=np.pi/6, w=0)
     print("double pendulum instantiated")
     
