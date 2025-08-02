@@ -71,6 +71,7 @@ class DoublePendulumTests(unittest.TestCase):
         '''
             Tests the cartesian coordinates of the two pendula composing the double pendulum, after setup.
         '''
+        # properties list, length1, origin1, length2
         properties = [
             (1, [0,0], 1)
             ,(2, [0,0], 2)
@@ -79,7 +80,7 @@ class DoublePendulumTests(unittest.TestCase):
             ,(1, [0,0], 1)
             ,(1, [0,0], 1)
         ]
-
+        # cases for pendulum state
         state= [
             {'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
             ,{'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
@@ -88,7 +89,7 @@ class DoublePendulumTests(unittest.TestCase):
             ,{'theta1': np.pi/2, 'theta2': np.pi, 'w1': 0, 'w2': 0}
             ,{'theta1': -np.pi/2, 'theta2': -np.pi, 'w1': 0, 'w2': 0}
         ]
-
+        # expected cartesian coordinates for each pendulum
         expected_output = [
             ([0,-1], [0,-2])
             ,([0,-2], [0,-4])
@@ -97,7 +98,7 @@ class DoublePendulumTests(unittest.TestCase):
             ,([1,0], [1,1])
             ,([-1,0], [-1,1])
         ]
-
+        # test the defined cases
         test_cases = zip(properties, state, expected_output)
         for case in test_cases:
             with self.subTest(case):
@@ -126,22 +127,28 @@ class DoublePendulumTests(unittest.TestCase):
         '''
             Tests the cartesian velocities of the two pendula composing the double pendulum, after setup.
         '''
+        # pendulum properties, length1, length2
         properties = [
             (1, 1)
             , (1, 1)
-            ,
+            , (1, 1)
+            , (1, 2)
         ]
-
+        # cases for pendulum state
         state= [
             {'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
-            ,{'theta1': 0, 'theta2': 0, 'w1': 1, 'w2': 1}
+            , {'theta1': 0, 'theta2': 0, 'w1': 1, 'w2': 1}
+            , {'theta1': np.pi/2, 'theta2': 0, 'w1': 1, 'w2': 1}
+            , {'theta1': 0, 'theta2': np.pi/2, 'w1': 2, 'w2': 1}
         ]
-
+        # expected cartesian velocities for each pendulum
         expected_output = [
             ([0,0], [0,0])
             ,([1,0], [2,0])
+            ,([0,1], [1,1])
+            ,([2,0], [2,2])
         ]
-
+        # test the defined cases
         test_cases = zip(properties, state, expected_output)
         for case in test_cases:
             with self.subTest(case):
