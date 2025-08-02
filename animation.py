@@ -176,12 +176,12 @@ class DoublePendulumAnimation():
 if __name__ == '__main__':
 
     # instantiate the two pendula making up the double pendulum
-    pendulum1 = Pendulum(mass=1, length=1, origin=[0,0])
+    pendulum1 = Pendulum(mass=1, length=1, origin=[1,1])
     pendulum2 = Pendulum(mass=1, length=1)
     # instantiate the double pendulum
     double_pendulum = DoublePendulum(pendulum1=pendulum1, pendulum2=pendulum2)
-    double_pendulum.set_upper_pendulum(theta=np.pi, w=0)
-    double_pendulum.set_lower_pendulum(theta=np.pi/6, w=0)
+    double_pendulum.set_upper_pendulum(theta=np.pi/4, w=0)
+    double_pendulum.set_lower_pendulum(theta=np.pi, w=0)
     print("double pendulum instantiated")
     
     rk_solver = RungeKuttaIntegrator()
