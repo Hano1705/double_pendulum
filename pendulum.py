@@ -34,7 +34,7 @@ class Pendulum():
         self.x = self.length * np.sin(self.theta) + self.origin[0]
         self.y = - self.length * np.cos(self.theta) + self.origin[1]
         
-    def set_angular_velocity(self, w: float|int):
+    def set_angular_velocity(self, w: float|int, set_cart: bool=True):
         '''
             Set angular velocity, also sets cartesian velocity.
             -----------------------
@@ -43,8 +43,10 @@ class Pendulum():
             w: angular velocity.
         '''
         self.w = w
-        self.vx = self.length * self.w * np.cos(self.theta)
-        self.vy = self.length * self.w * np.sin(self.theta)
+        if set_cart == True:
+            self.vx = self.length * self.w * np.cos(self.theta)
+            self.vy = self.length * self.w * np.sin(self.theta)
+        
 
     def set_properties(self, mass: int|float
                       , length: int|float):
@@ -108,7 +110,13 @@ class DoublePendulum():
         self.pendulum2.set_origin([xp1, yp1])
         # set lower pendulum
         self.pendulum2.set_angle(theta = theta2)
-        self.pendulum2.set_angular_velocity(w = w2)
+        self.pendulum2.set_angular_velocity(w = w2, set_cart=False)
+        self.pendulum2.vx = (self.pendulum1.vx 
+                             + self.pendulum2.length*self.pendulum2.w
+                             *np.cos(self.pendulum2.theta) )
+        self.pendulum2.vy = (self.pendulum1.vy 
+                             + self.pendulum2.length*self.pendulum2.w
+                             *np.sin(self.pendulum2.theta) )
 
 
 if __name__ == '__main__':
@@ -120,7 +128,7 @@ if __name__ == '__main__':
     double_pendulum.set_double_pendulum(theta1=np.pi/4, w1=0
                                         , theta2=np.pi/6, w2=0)
     print("double pendulum instantiated")
-    
+
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots()
 

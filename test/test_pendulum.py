@@ -121,6 +121,49 @@ class DoublePendulumTests(unittest.TestCase):
                                        , expected_output[1][0], 10)
                 self.assertAlmostEqual(double_pendulum.pendulum2.y
                                        , expected_output[1][1], 10)
+                
+    def test_double_pendulum_velocities(self):
+        '''
+            Tests the cartesian velocities of the two pendula composing the double pendulum, after setup.
+        '''
+        properties = [
+            (1, 1)
+            , (1, 1)
+            ,
+        ]
+
+        state= [
+            {'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
+            ,{'theta1': 0, 'theta2': 0, 'w1': 1, 'w2': 1}
+        ]
+
+        expected_output = [
+            ([0,0], [0,0])
+            ,([1,0], [2,0])
+        ]
+
+        test_cases = zip(properties, state, expected_output)
+        for case in test_cases:
+            with self.subTest(case):
+                # name test data
+                properties, state, expected_output = case
+                # initiate double pendulum
+                upper_pendulum = Pendulum(length=properties[0])
+                lower_pendulum = Pendulum(length=properties[1])
+                double_pendulum = DoublePendulum(pendulum1=upper_pendulum
+                                                 , pendulum2=lower_pendulum)
+                # set upper pendulum
+                double_pendulum.set_double_pendulum(**state)
+                
+                # check for equality
+                self.assertAlmostEqual(double_pendulum.pendulum1.vx
+                                       , expected_output[0][0], 10)
+                self.assertAlmostEqual(double_pendulum.pendulum1.vy
+                                       , expected_output[0][1], 10)
+                self.assertAlmostEqual(double_pendulum.pendulum2.vx
+                                       , expected_output[1][0], 10)
+                self.assertAlmostEqual(double_pendulum.pendulum2.vy
+                                       , expected_output[1][1], 10)
 
 if __name__ == '__main__':
     unittest.main(verbosity=1)
