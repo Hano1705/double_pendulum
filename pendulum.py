@@ -80,6 +80,24 @@ class Pendulum():
         else:
             self.origin = origin
 
+    def calculate_kinetic_energy(self):
+        '''
+            Calculates the kinetic energy of the pendulum
+        '''
+        return 1/2 * self.mass * (self.vx**2+self.vy**2)
+    
+    def calculate_potential_energy(self):
+        '''
+            Calculates the potential energy of the pendulum
+        '''
+        return 9.82 * self.mass * self.y
+    
+    def calculate_mechanical_energy(self):
+        '''
+            Calculates the mechanical energy
+        '''
+        return self.calculate_kinetic_energy()+self.calculate_potential_energy()
+
 
 class DoublePendulum():
     '''
@@ -117,7 +135,27 @@ class DoublePendulum():
                              + self.pendulum2.length*self.pendulum2.w
                              *np.sin(self.pendulum2.theta) )
 
-
+    def calculate_kinetic_energy(self):
+        '''
+            Calculates the kinetic energy of the double pendulum
+        '''
+        return (self.pendulum1.calculate_kinetic_energy() 
+                + self.pendulum2.calculate_kinetic_energy() )
+    
+    def calculate_potential_energy(self):
+        '''
+            Calculates the kinetic energy of the double pendulum
+        '''
+        return (self.pendulum1.calculate_potential_energy()
+                + self.pendulum2.calculate_potential_energy() )
+    
+    def calculate_mechanical_energy(self):
+        '''
+            Calculates the kinetic energy of the double pendulum
+        '''
+        return (self.pendulum1.calculate_mechanical_energy()
+                + self.pendulum2.calculate_mechanical_energy() )
+    
 if __name__ == '__main__':
     # instantiate the two pendula making up the double pendulum
     pendulum1 = Pendulum(mass=1, length=1, origin=[0,0])

@@ -170,6 +170,6 @@ if __name__ == '__main__':
     my_simulation = DoublePendulumSimulation()
     my_simulation.run_simulation(double_pendulum=double_pendulum
                                 , propagator=rk_solver.propagateState
-                                , simulation_time=10
+                                , simulation_time=100
                                 , timestep=0.01)
     print('finished simulation')
