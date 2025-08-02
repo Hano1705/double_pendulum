@@ -151,9 +151,9 @@ class DoublePendulumAnimation():
         pendulum_artist.set_ydata(np.array([y0, y1[frame], y2[frame]]))
 
         # update trace plot
-        if frame>1000:
-            trace_artist.set_xdata(x2[frame-1000:frame])
-            trace_artist.set_ydata(y2[frame-1000:frame])
+        if frame>200:
+            trace_artist.set_xdata(x2[frame-200:frame])
+            trace_artist.set_ydata(y2[frame-200:frame])
         else:
             trace_artist.set_xdata(x2[:frame])
             trace_artist.set_ydata(y2[:frame])
@@ -176,12 +176,12 @@ class DoublePendulumAnimation():
 if __name__ == '__main__':
 
     # instantiate the two pendula making up the double pendulum
-    pendulum1 = Pendulum(mass=1, length=1, origin=[1,1])
+    pendulum1 = Pendulum(mass=1, length=1, origin=[0,0])
     pendulum2 = Pendulum(mass=1, length=1)
     # instantiate the double pendulum
     double_pendulum = DoublePendulum(pendulum1=pendulum1, pendulum2=pendulum2)
-    double_pendulum.set_upper_pendulum(theta=np.pi/4, w=0)
-    double_pendulum.set_lower_pendulum(theta=np.pi, w=0)
+    double_pendulum.set_double_pendulum(theta1=np.pi/2, w1=0,
+                                       theta2=np.pi/4, w2=3)
     print("double pendulum instantiated")
     
     rk_solver = RungeKuttaIntegrator()

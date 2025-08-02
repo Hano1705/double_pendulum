@@ -88,34 +88,27 @@ class DoublePendulum():
         self.pendulum1 = pendulum1
         self.pendulum2 = pendulum2
 
-    def set_upper_pendulum(self, theta: float|int, w: float|int):
+    def set_double_pendulum(self, theta1: float|int, w1: float|int
+                            , theta2: float|int, w2: float|int):
         '''
             Sets upper pendulum, as well as origin for lower pendulum
             
             Parameters:
             ----------------
-            theta:  upper pendulum angle
-            w:      upper pendulum angular velocity
+            theta1:  upper pendulum angle
+            w1:      upper pendulum angular velocity
+            theta2:  lower pendulum angle
+            w2:      lower pendulum angular velocity
         '''
         # set upper pendulum
-        self.pendulum1.set_angle(theta = theta)
-        self.pendulum1.set_angular_velocity(w = w)
+        self.pendulum1.set_angle(theta = theta1)
+        self.pendulum1.set_angular_velocity(w = w1)
         # set lower pendulum origin
         xp1, yp1 = self.pendulum1.x, self.pendulum1.y 
         self.pendulum2.set_origin([xp1, yp1])
-
-    def set_lower_pendulum(self, theta: float|int, w: float|int):
-        '''
-            Sets lower pendulum angle and angular velocity
-            
-            Parameters:
-            ----------------
-            theta:  lower pendulum angle
-            w:      lower pendulum angular velocity
-        '''
         # set lower pendulum
-        self.pendulum2.set_angle(theta = theta)
-        self.pendulum2.set_angular_velocity(w = w)
+        self.pendulum2.set_angle(theta = theta2)
+        self.pendulum2.set_angular_velocity(w = w2)
 
 
 if __name__ == '__main__':
@@ -124,11 +117,10 @@ if __name__ == '__main__':
     pendulum2 = Pendulum(mass=1, length=1)
     # instantiate the double pendulum
     double_pendulum = DoublePendulum(pendulum1=pendulum1, pendulum2=pendulum2)
-    double_pendulum.set_upper_pendulum(theta=np.pi/4, w=0)
-    double_pendulum.set_lower_pendulum(theta=np.pi/6, w=0)
-   
-
+    double_pendulum.set_double_pendulum(theta1=np.pi/4, w1=0
+                                        , theta2=np.pi/6, w2=0)
     print("double pendulum instantiated")
+    
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots()
 

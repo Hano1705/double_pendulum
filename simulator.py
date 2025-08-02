@@ -110,8 +110,8 @@ class DoublePendulumSimulation():
                                       , state=state
                                       , timestep=timestep)
             # reset pendulum position
-            double_pendulum.set_upper_pendulum(theta=state[0], w=state[2])
-            double_pendulum.set_lower_pendulum(theta=state[1], w=state[3])
+            double_pendulum.set_double_pendulum(theta1=state[0], w1=state[2]   
+                                               , theta2=state[1], w2=state[3])
 
             # append results to result lists
             self.time = np.append(self.time, time)
@@ -160,8 +160,8 @@ if __name__ == '__main__':
     pendulum2 = Pendulum(mass=1, length=1)
     # instantiate the double pendulum
     double_pendulum = DoublePendulum(pendulum1=pendulum1, pendulum2=pendulum2)
-    double_pendulum.set_upper_pendulum(theta=np.pi/4, w=0)
-    double_pendulum.set_lower_pendulum(theta=np.pi/6, w=0)
+    double_pendulum.set_double_pendulum(theta1=np.pi/4, w1=0
+                                       , theta2=np.pi/6, w2=0)
     print("double pendulum instantiated")
     
     rk_solver = RungeKuttaIntegrator()
