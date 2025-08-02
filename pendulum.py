@@ -108,7 +108,6 @@ class DoublePendulum():
         # set lower pendulum origin
         xp1, yp1 = self.pendulum1.x, self.pendulum1.y 
         self.pendulum2.set_origin([xp1, yp1])
-        # set lower pendulum
         self.pendulum2.set_angle(theta = theta2)
         self.pendulum2.set_angular_velocity(w = w2, set_cart=False)
         self.pendulum2.vx = (self.pendulum1.vx 

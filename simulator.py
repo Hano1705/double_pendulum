@@ -72,6 +72,7 @@ class DoublePendulumSimulation():
     
     def run_simulation(self, double_pendulum: DoublePendulum
                            , propagator: MethodType|FunctionType
+                           , simulation_time: float|int
                            , timestep: float):
         '''
             Calculates the path of the pendulum
@@ -103,7 +104,7 @@ class DoublePendulumSimulation():
 
         func = partial(self.double_pendulum_dynamics, properties=properties)
 
-        while self.time[-1] < 10:
+        while self.time[-1] < simulation_time:
             # update time and state
             time, state = propagator(rhsFunc=func
                                       , time=time
@@ -169,5 +170,6 @@ if __name__ == '__main__':
     my_simulation = DoublePendulumSimulation()
     my_simulation.run_simulation(double_pendulum=double_pendulum
                                 , propagator=rk_solver.propagateState
+                                , simulation_time=10
                                 , timestep=0.01)
     print('finished simulation')

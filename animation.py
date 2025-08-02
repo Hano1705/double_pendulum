@@ -115,7 +115,7 @@ class DoublePendulumAnimation():
         t, x1, y1, x2, y2 = self.t, self.x1, self.y1, self.x2, self.y2
 
         # globalise plot variables
-        global fig, ax, pendulum_artist, trace_artist
+        global fig, ax, pendulum_artist, trace_artist, text_artist
 
         fig, ax = plt.subplots()
 
@@ -135,7 +135,10 @@ class DoublePendulumAnimation():
         # define artists for projectile and path plotting
         pendulum_artist, = ax.plot([x0, x1[0], x2[0]],[y0, y1[0], y2[0]]
                            ,'o-', color='blue')
-        trace_artist = ax.plot(x2[0],y2[0], color='red',alpha=0.3)[0]
+        trace_artist, = ax.plot(x2[0],y2[0], color='red',alpha=0.3)
+        text_artist = ax.text(0.1, 0.9, s=f"t = {t[0]:.1f} s"
+                              , transform=ax.transAxes
+                              ,bbox={'facecolor':'green','alpha':0.2})
 
     def updateFrame(self, frame):
         '''
@@ -151,12 +154,16 @@ class DoublePendulumAnimation():
         pendulum_artist.set_ydata(np.array([y0, y1[frame], y2[frame]]))
 
         # update trace plot
-        if frame>200:
-            trace_artist.set_xdata(x2[frame-200:frame])
-            trace_artist.set_ydata(y2[frame-200:frame])
+        tail_length = len(self.t)//10
+        if frame>tail_length:
+            trace_artist.set_xdata(x2[frame-tail_length:frame])
+            trace_artist.set_ydata(y2[frame-tail_length:frame])
         else:
             trace_artist.set_xdata(x2[:frame])
             trace_artist.set_ydata(y2[:frame])
+
+        # update text
+        text_artist.set_text(s=f"t = {t[frame]:.1f} s")
 
         return (pendulum_artist, trace_artist)
 
@@ -189,6 +196,7 @@ if __name__ == '__main__':
     my_simulation = DoublePendulumSimulation()
     my_simulation.run_simulation(double_pendulum=double_pendulum
                                 , propagator=rk_solver.propagateState
+                                , simulation_time=10
                                 , timestep=0.02)
     print('finished simulation')
     my_animation = DoublePendulumAnimation(simulation=my_simulation
