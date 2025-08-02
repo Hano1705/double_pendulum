@@ -69,38 +69,58 @@ class DoublePendulumTests(unittest.TestCase):
     '''A test case for the double pendulum class'''
     def test_double_pendulum_positions(self):
         '''
-            Tests the positions of the two pendula composing the double pendulum.
+            Tests the cartesian coordinates of the two pendula composing the double pendulum, after setup.
         '''
-        input_upper_pendulum = [
-            (1, [0,0], 0, 0),
+        properties = [
+            (1, [0,0], 1)
+            ,(2, [0,0], 2)
+            ,(1, [1,1], 1)
+            ,(1, [0,0], 1)
+            ,(1, [0,0], 1)
+            ,(1, [0,0], 1)
         ]
 
-        input_lower_pendulum = [
-            (1, 0, 0)
+        state= [
+            {'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
+            ,{'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
+            ,{'theta1': 0, 'theta2': 0, 'w1': 0, 'w2': 0}
+            ,{'theta1': np.pi/2, 'theta2': 0, 'w1': 0, 'w2': 0}
+            ,{'theta1': np.pi/2, 'theta2': np.pi, 'w1': 0, 'w2': 0}
+            ,{'theta1': -np.pi/2, 'theta2': -np.pi, 'w1': 0, 'w2': 0}
         ]
 
         expected_output = [
-            ()
+            ([0,-1], [0,-2])
+            ,([0,-2], [0,-4])
+            ,([1,0], [1,-1])
+            ,([1,0], [1,-1])
+            ,([1,0], [1,1])
+            ,([-1,0], [-1,1])
         ]
 
+        test_cases = zip(properties, state, expected_output)
         for case in test_cases:
             with self.subTest(case):
                 # name test data
-                input1, input2, expected_output = case
+                properties, state, expected_output = case
                 # initiate double pendulum
-                upper_pendulum = Pendulum(length=input1[0], origin=input1[1])
-                lower_pendulum = Pendulum(length=input2[0])
+                upper_pendulum = Pendulum(length=properties[0]
+                                          , origin=properties[1])
+                lower_pendulum = Pendulum(length=properties[2])
                 double_pendulum = DoublePendulum(pendulum1=upper_pendulum
                                                  , pendulum2=lower_pendulum)
                 # set upper pendulum
-                double_pendulum.set_upper_pendulum(theta=input1[2], w=input1[3])
+                double_pendulum.set_double_pendulum(**state)
                 
                 # check for equality
-                self.assertAlmostEqual(pendulum.x, expected_output[0], 10)
-                self.assertAlmostEqual(pendulum.y, expected_output[1], 10)
-
-    def test_pendulum_angular_velocity(self):   
-    
+                self.assertAlmostEqual(double_pendulum.pendulum1.x
+                                       , expected_output[0][0], 10)
+                self.assertAlmostEqual(double_pendulum.pendulum1.y
+                                       , expected_output[0][1], 10)
+                self.assertAlmostEqual(double_pendulum.pendulum2.x
+                                       , expected_output[1][0], 10)
+                self.assertAlmostEqual(double_pendulum.pendulum2.y
+                                       , expected_output[1][1], 10)
 
 if __name__ == '__main__':
     unittest.main(verbosity=1)
