@@ -34,26 +34,27 @@ class PendulumAnimation():
         t, x, y = self.t, self.x, self.y
 
         # globalise plot variables
-        global fig, ax, pendulum, trace
+        #global fig, ax, pendulum, trace
 
-        fig, ax = plt.subplots()
+        self._fig, self._ax = plt.subplots()
 
         # set axis limits
         x0, y0 = self.pendulum.origin
         width = self.pendulum.length*1.5
-        ax.set_xlim(left=x0-width, right=x0+width)
-        ax.set_ylim(bottom=y0-width, top=y0+width)
+        self._ax.set_xlim(left=x0-width, right=x0+width)
+        self._ax.set_ylim(bottom=y0-width, top=y0+width)
 
         # axis labels
-        ax.set_xlabel('x (m)')
-        ax.set_ylabel('y (m)')
+        self._ax.set_xlabel('x (m)')
+        self._ax.set_ylabel('y (m)')
 
         # set ax as square
-        ax.set_aspect('equal', adjustable='box')
+        self._ax.set_aspect('equal', adjustable='box')
 
         # define artists for projectile and path plotting
-        pendulum = ax.plot([x0, x[0]],[y0, y[0]],'o-', color='blue')[0]
-        trace = ax.plot(x[0],y[0], color='red',alpha=0.3)[0]
+        self._pendulum, = self._ax.plot([x0, x[0]],[y0, y[0]]
+                                       ,'o-', color='blue')
+        self._trace, = self._ax.plot(x[0],y[0], color='red',alpha=0.3)
 
     def updateFrame(self, frame):
         '''
@@ -65,18 +66,18 @@ class PendulumAnimation():
         t, x, y = self.t, self.x, self.y
         x0, y0 = self.pendulum.origin
         # update the pendulum plot
-        pendulum.set_xdata(np.array([x0, x[frame]]))
-        pendulum.set_ydata(np.array([y0, y[frame]]))
+        self._pendulum.set_xdata(np.array([x0, x[frame]]))
+        self._pendulum.set_ydata(np.array([y0, y[frame]]))
 
         # update trace plot
         if frame>100:
-            trace.set_xdata(x[frame-100:frame])
-            trace.set_ydata(y[frame-100:frame])
+            self._trace.set_xdata(x[frame-100:frame])
+            self._trace.set_ydata(y[frame-100:frame])
         else:
-            trace.set_xdata(x[:frame])
-            trace.set_ydata(y[:frame])
+            self._trace.set_xdata(x[:frame])
+            self._trace.set_ydata(y[:frame])
 
-        return (pendulum, trace)
+        return (self._pendulum, self._trace)
 
     def showProjectileAnimation(self):
         '''
@@ -86,7 +87,7 @@ class PendulumAnimation():
         self.initializeAnimation()
 
         # instantiate animation
-        ani = animation.FuncAnimation(fig=fig, func=self.updateFrame, 
+        ani = animation.FuncAnimation(fig=self._fig, func=self.updateFrame, 
                                     frames=len(self.t), interval=20, repeat_delay=1000)
         plt.show()
 
@@ -114,31 +115,29 @@ class DoublePendulumAnimation():
         # name variables for brevity
         t, x1, y1, x2, y2 = self.t, self.x1, self.y1, self.x2, self.y2
 
-        # globalise plot variables
-        global fig, ax, pendulum_artist, trace_artist, text_artist
-
-        fig, ax = plt.subplots()
+        self._fig, self._ax = plt.subplots()
 
         # set axis limits
         x0, y0 = self.double_pendulum.pendulum1.origin
         width = self.double_pendulum.pendulum1.length*2*1.5
-        ax.set_xlim(left=x0-width, right=x0+width)
-        ax.set_ylim(bottom=y0-width, top=y0+width)
+        self._ax.set_xlim(left=x0-width, right=x0+width)
+        self._ax.set_ylim(bottom=y0-width, top=y0+width)
 
         # axis labels
-        ax.set_xlabel('x (m)')
-        ax.set_ylabel('y (m)')
+        self._ax.set_xlabel('x (m)')
+        self._ax.set_ylabel('y (m)')
 
         # set ax as square
-        ax.set_aspect('equal', adjustable='box')
+        self._ax.set_aspect('equal', adjustable='box')
 
         # define artists for projectile and path plotting
-        pendulum_artist, = ax.plot([x0, x1[0], x2[0]],[y0, y1[0], y2[0]]
-                           ,'o-', color='blue')
-        trace_artist, = ax.plot(x2[0],y2[0], color='red',alpha=0.3)
-        text_artist = ax.text(0.1, 0.9, s=f"t = {t[0]:.1f} s"
-                              , transform=ax.transAxes
-                              ,bbox={'facecolor':'green','alpha':0.2})
+        self._pendulum_artist, = self._ax.plot([x0, x1[0], x2[0]]
+                                            ,[y0, y1[0], y2[0]]
+                                            ,'o-', color='blue')
+        self._trace_artist, = self._ax.plot(x2[0],y2[0], color='red',alpha=0.3)
+        self._text_artist = self._ax.text(0.1, 0.9, s=f"t = {t[0]:.1f} s"
+                              , transform=self._ax.transAxes
+                              , bbox={'facecolor':'green','alpha':0.2})
 
     def updateFrame(self, frame):
         '''
@@ -150,22 +149,22 @@ class DoublePendulumAnimation():
         t, x1, y1, x2, y2 = self.t, self.x1, self.y1, self.x2, self.y2
         x0, y0 = self.double_pendulum.pendulum1.origin
         # update the pendulum plot
-        pendulum_artist.set_xdata(np.array([x0, x1[frame], x2[frame]]))
-        pendulum_artist.set_ydata(np.array([y0, y1[frame], y2[frame]]))
+        self._pendulum_artist.set_xdata(np.array([x0, x1[frame], x2[frame]]))
+        self._pendulum_artist.set_ydata(np.array([y0, y1[frame], y2[frame]]))
 
         # update trace plot
         tail_length = len(self.t)//10
         if frame>tail_length:
-            trace_artist.set_xdata(x2[frame-tail_length:frame])
-            trace_artist.set_ydata(y2[frame-tail_length:frame])
+            self._trace_artist.set_xdata(x2[frame-tail_length:frame])
+            self._trace_artist.set_ydata(y2[frame-tail_length:frame])
         else:
-            trace_artist.set_xdata(x2[:frame])
-            trace_artist.set_ydata(y2[:frame])
+            self._trace_artist.set_xdata(x2[:frame])
+            self._trace_artist.set_ydata(y2[:frame])
 
         # update text
-        text_artist.set_text(s=f"t = {t[frame]:.1f} s")
+        self._text_artist.set_text(s=f"t = {t[frame]:.1f} s")
 
-        return (pendulum_artist, trace_artist)
+        return (self._pendulum_artist, self._trace_artist)
 
     def showProjectileAnimation(self):
         '''
@@ -175,7 +174,7 @@ class DoublePendulumAnimation():
         self.initializeAnimation()
 
         # instantiate animation
-        ani = animation.FuncAnimation(fig=fig, func=self.updateFrame, 
+        ani = animation.FuncAnimation(fig=self._fig, func=self.updateFrame, 
                                     frames=len(self.t), interval=20, repeat_delay=1000)
         plt.show()
 
