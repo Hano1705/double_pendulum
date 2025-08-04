@@ -10,7 +10,7 @@ class RungeKuttaIntegrator():
     def __init__(self):
         pass
 
-    def propagateState(self, rhsFunc: FunctionType 
+    def propagate_state(self, rhs_func: FunctionType 
                        , time: float, state: np.ndarray 
                        , timestep: float) -> tuple:
         '''
@@ -27,13 +27,13 @@ class RungeKuttaIntegrator():
             tuple: (float, np.ndarray)
         '''
         # calculate k1 and check that is is numpy array type
-        k1 = rhsFunc(state)
+        k1 = rhs_func(state)
         if type(k1) is not np.ndarray:
-            raise TypeError(f"Your RHS function must return a numpy ndarray, yours returned: {type(rhsFunc(state))}")
+            raise TypeError(f"Your RHS function must return a numpy ndarray, yours returned: {type(rhs_func(state))}")
         # calculate rest of Runge-Kutta parameters
-        k2 = rhsFunc(state + timestep * k1/2)
-        k3 = rhsFunc(state + timestep * k2/2)
-        k4 = rhsFunc(state + timestep * k3)
+        k2 = rhs_func(state + timestep * k1/2)
+        k3 = rhs_func(state + timestep * k2/2)
+        k4 = rhs_func(state + timestep * k3)
         # final state
         state = state + timestep/6 * (k1 + 2*k2 + 2*k3 + k4)
         time = time + timestep

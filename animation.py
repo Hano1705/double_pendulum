@@ -26,7 +26,7 @@ class PendulumAnimation():
 
         self.pendulum = pendulum
 
-    def initializeAnimation(self):
+    def initialize_animation(self):
         '''
             Initializes the animation of the projectile
         '''
@@ -56,7 +56,7 @@ class PendulumAnimation():
                                        ,'o-', color='blue')
         self._trace, = self._ax.plot(x[0],y[0], color='red',alpha=0.3)
 
-    def updateFrame(self, frame):
+    def update_frame(self, frame):
         '''
             updates the frames for the projectile animation
             :param frame: the present frame
@@ -84,10 +84,10 @@ class PendulumAnimation():
             shows the projectile animation
         '''
         # initialize animation
-        self.initializeAnimation()
+        self.initialize_animation()
 
         # instantiate animation
-        ani = animation.FuncAnimation(fig=self._fig, func=self.updateFrame, 
+        ani = animation.FuncAnimation(fig=self._fig, func=self.update_frame, 
                                     frames=len(self.t), interval=20, repeat_delay=1000)
         plt.show()
 
@@ -108,7 +108,7 @@ class DoublePendulumAnimation():
 
         self.double_pendulum = double_pendulum
 
-    def initializeAnimation(self):
+    def initialize_animation(self):
         '''
             Initializes the animation of the projectile
         '''
@@ -139,7 +139,7 @@ class DoublePendulumAnimation():
                               , transform=self._ax.transAxes
                               , bbox={'facecolor':'green','alpha':0.2})
 
-    def updateFrame(self, frame):
+    def update_frame(self, frame):
         '''
             updates the frames for the projectile animation
             :param frame: the present frame
@@ -166,15 +166,15 @@ class DoublePendulumAnimation():
 
         return (self._pendulum_artist, self._trace_artist)
 
-    def showProjectileAnimation(self):
+    def show_projectile_animation(self):
         '''
             shows the projectile animation
         '''
         # initialize animation
-        self.initializeAnimation()
+        self.initialize_animation()
 
         # instantiate animation
-        ani = animation.FuncAnimation(fig=self._fig, func=self.updateFrame, 
+        ani = animation.FuncAnimation(fig=self._fig, func=self.update_frame, 
                                     frames=len(self.t), interval=20, repeat_delay=1000)
         plt.show()
 
@@ -194,11 +194,11 @@ if __name__ == '__main__':
 
     my_simulation = DoublePendulumSimulation()
     my_simulation.run_simulation(double_pendulum=double_pendulum
-                                , propagator=rk_solver.propagateState
+                                , propagator=rk_solver.propagate_state
                                 , simulation_time=10
                                 , timestep=0.02)
     print('finished simulation')
     my_animation = DoublePendulumAnimation(simulation=my_simulation
                                         , double_pendulum=double_pendulum)
-    my_animation.showProjectileAnimation()
+    my_animation.show_projectile_animation()
     print('finished animation')

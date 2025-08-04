@@ -12,7 +12,7 @@ class PendulumSimulator:
 
     def __init__(self):
         pass
-
+    
     def run_simulation(self, pendulum: Pendulum
                            , propagator: MethodType|FunctionType
                            , timestep: float):
@@ -57,10 +57,10 @@ class PendulumSimulator:
         '''
         theta, w = state
 
-        thetaDerivative = w
-        wDerivative = - 9.82 * np.sin(theta) / length
+        theta_derivative = w
+        w_derivative = - 9.82 * np.sin(theta) / length
 
-        return np.array([thetaDerivative, wDerivative]
+        return np.array([theta_derivative, w_derivative]
                          , dtype=np.float32)
     
 class DoublePendulumSimulation():
@@ -69,7 +69,7 @@ class DoublePendulumSimulation():
     '''
     def __init__(self):
         pass
-    
+
     def run_simulation(self, double_pendulum: DoublePendulum
                            , propagator: MethodType|FunctionType
                            , simulation_time: float|int
@@ -106,7 +106,7 @@ class DoublePendulumSimulation():
 
         while self.time[-1] < simulation_time:
             # update time and state
-            time, state = propagator(rhsFunc=func
+            time, state = propagator(rhs_func=func
                                       , time=time
                                       , state=state
                                       , timestep=timestep)
@@ -169,7 +169,7 @@ if __name__ == '__main__':
 
     my_simulation = DoublePendulumSimulation()
     my_simulation.run_simulation(double_pendulum=double_pendulum
-                                , propagator=rk_solver.propagateState
-                                , simulation_time=100
+                                , propagator=rk_solver.propagate_state
+                                , simulation_time=10
                                 , timestep=0.01)
     print('finished simulation')
